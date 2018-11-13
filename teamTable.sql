@@ -115,7 +115,11 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
+ exec [Project1].[TruncateStarSchemaData]
+ exec [Project1].[DropForeignKeysFromStarSchemaData]
+ alter table [CH01-01-Dimension].SalesManagers add 
 
+ 
 
 	INSERT INTO [CH01-01-Dimension].SalesManagers
 	(
