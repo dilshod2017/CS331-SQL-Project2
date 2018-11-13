@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [BIClass]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  Database [BIClass]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE DATABASE [BIClass]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -77,16 +77,16 @@ ALTER DATABASE [BIClass] SET QUERY_STORE = OFF
 GO
 USE [BIClass]
 GO
-/****** Object:  User [rheller]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  User [rheller]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE USER [rheller] WITHOUT LOGIN WITH DEFAULT_SCHEMA=[dbo]
 GO
-/****** Object:  User [OCCAM\pheller]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  User [OCCAM\pheller]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE USER [OCCAM\pheller] WITH DEFAULT_SCHEMA=[dbo]
 GO
-/****** Object:  User [EC3\thehitman]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  User [EC3\thehitman]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE USER [EC3\thehitman] WITH DEFAULT_SCHEMA=[dbo]
 GO
-/****** Object:  User [dbuser]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  User [dbuser]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE USER [dbuser] WITHOUT LOGIN WITH DEFAULT_SCHEMA=[dbo]
 GO
 ALTER ROLE [db_datareader] ADD MEMBER [rheller]
@@ -97,25 +97,25 @@ ALTER ROLE [db_owner] ADD MEMBER [EC3\thehitman]
 GO
 ALTER ROLE [db_datareader] ADD MEMBER [dbuser]
 GO
-/****** Object:  Schema [CH01-01-Dimension]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  Schema [CH01-01-Dimension]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE SCHEMA [CH01-01-Dimension]
 GO
-/****** Object:  Schema [CH01-01-Fact]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  Schema [CH01-01-Fact]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE SCHEMA [CH01-01-Fact]
 GO
-/****** Object:  Schema [FileUpload]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  Schema [FileUpload]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE SCHEMA [FileUpload]
 GO
-/****** Object:  Schema [Process]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  Schema [Process]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE SCHEMA [Process]
 GO
-/****** Object:  Schema [Project1]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  Schema [Project1]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE SCHEMA [Project1]
 GO
-/****** Object:  Schema [Utils]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  Schema [Utils]    Script Date: 11/13/2018 10:27:16 AM ******/
 CREATE SCHEMA [Utils]
 GO
-/****** Object:  UserDefinedFunction [dbo].[Multiplyby10]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  UserDefinedFunction [dbo].[Multiplyby10]    Script Date: 11/13/2018 10:27:16 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -140,7 +140,7 @@ BEGIN
 
 END
 GO
-/****** Object:  View [Utils].[uvw_FindColumnDefinitionPlusDefaultAndCheckConstraint]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  View [Utils].[uvw_FindColumnDefinitionPlusDefaultAndCheckConstraint]    Script Date: 11/13/2018 10:27:16 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -239,7 +239,7 @@ FROM    ( SELECT    TABLE_CATALOG ,
  
  
 GO
-/****** Object:  View [Utils].[uvw_FindTablesStorageBytes]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  View [Utils].[uvw_FindTablesStorageBytes]    Script Date: 11/13/2018 10:27:16 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -276,7 +276,7 @@ select FullyQualifiedTableName
 from Utils.uvw_FindColumnDefinitionPlusDefaultAndCheckConstraint
 where (SchemaName like 'CH%');
 GO
-/****** Object:  View [Utils].[ShowServerUserNameAndCurrentDatabase]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  View [Utils].[ShowServerUserNameAndCurrentDatabase]    Script Date: 11/13/2018 10:27:16 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -288,7 +288,7 @@ as
        ,       CurrentDatabase =  db_name();  
  
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimCustomer]    Script Date: 11/13/2018 10:11:11 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimCustomer]    Script Date: 11/13/2018 10:27:16 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -302,7 +302,7 @@ CREATE TABLE [CH01-01-Dimension].[DimCustomer](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimGender]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimGender]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -316,7 +316,7 @@ CREATE TABLE [CH01-01-Dimension].[DimGender](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimMaritalStatus]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimMaritalStatus]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -330,7 +330,7 @@ CREATE TABLE [CH01-01-Dimension].[DimMaritalStatus](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimOccupation]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimOccupation]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -344,7 +344,7 @@ CREATE TABLE [CH01-01-Dimension].[DimOccupation](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimOrderDate]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimOrderDate]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -360,7 +360,7 @@ CREATE TABLE [CH01-01-Dimension].[DimOrderDate](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimProduct]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimProduct]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -380,7 +380,7 @@ CREATE TABLE [CH01-01-Dimension].[DimProduct](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimProductCategory]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimProductCategory]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -394,7 +394,7 @@ CREATE TABLE [CH01-01-Dimension].[DimProductCategory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimProductSubcategory]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimProductSubcategory]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -409,7 +409,7 @@ CREATE TABLE [CH01-01-Dimension].[DimProductSubcategory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[DimTerritory]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[DimTerritory]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -425,7 +425,7 @@ CREATE TABLE [CH01-01-Dimension].[DimTerritory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Dimension].[SalesManagers]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Dimension].[SalesManagers]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -441,7 +441,7 @@ CREATE TABLE [CH01-01-Dimension].[SalesManagers](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [CH01-01-Fact].[Data]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [CH01-01-Fact].[Data]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -482,7 +482,7 @@ CREATE TABLE [CH01-01-Fact].[Data](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[tempTable]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [dbo].[tempTable]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -519,7 +519,7 @@ CREATE TABLE [dbo].[tempTable](
 	[TerritoryGroup] [varchar](20) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Variant]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [dbo].[Variant]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -533,7 +533,7 @@ CREATE TABLE [dbo].[Variant](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [FileUpload].[OriginallyLoadedData]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [FileUpload].[OriginallyLoadedData]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -567,7 +567,7 @@ CREATE TABLE [FileUpload].[OriginallyLoadedData](
 	[TerritoryGroup] [varchar](20) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [Process].[WorkflowSteps]    Script Date: 11/13/2018 10:11:12 AM ******/
+/****** Object:  Table [Process].[WorkflowSteps]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -636,7 +636,7 @@ REFERENCES [CH01-01-Dimension].[DimTerritory] ([TerritoryKey])
 GO
 ALTER TABLE [CH01-01-Fact].[Data] CHECK CONSTRAINT [FK_Data_DimTerritory]
 GO
-/****** Object:  StoredProcedure [dbo].[proc1]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [dbo].[proc1]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -662,7 +662,7 @@ BEGIN
 	
 END
 GO
-/****** Object:  StoredProcedure [Project1].[AddForeignKeysToStarSchemaData]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[AddForeignKeysToStarSchemaData]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -688,7 +688,7 @@ BEGIN
  	--alter table [CH01-01-Fact].Data add constraint foreign key() references ()
 END;
 GO
-/****** Object:  StoredProcedure [Project1].[DropForeignKeysFromStarSchemaData]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[DropForeignKeysFromStarSchemaData]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -733,7 +733,7 @@ BEGIN
 
 END;
 GO
-/****** Object:  StoredProcedure [Project1].[Load_Data]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_Data]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -753,7 +753,7 @@ BEGIN
 PRINT 'Hi'
 END;
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimCustomer]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimCustomer]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -773,7 +773,7 @@ PRINT 'Hi'
 
 END
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimGender]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimGender]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -793,7 +793,7 @@ BEGIN
 PRINT 'Hi'
 END;
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimMaritalStatus]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimMaritalStatus]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -813,7 +813,7 @@ PRINT 'Hi'
 
 END
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimOccupation]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimOccupation]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -833,7 +833,7 @@ PRINT 'Hi'
 
 END
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimOrderDate]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimOrderDate]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -853,7 +853,7 @@ PRINT 'Hi'
 
 END
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimProduct]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimProduct]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -874,7 +874,7 @@ PRINT 'Hi'
 		   
 END
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimProductCategory]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimProductCategory]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -897,7 +897,7 @@ PRINT 'Hi'
 
 END
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimProductSubcategory]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimProductSubcategory]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -915,7 +915,7 @@ BEGIN
  PRINT 'Hi'
 END;
 GO
-/****** Object:  StoredProcedure [Project1].[Load_DimTerritory]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_DimTerritory]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -935,7 +935,7 @@ PRINT 'Hi'
 	
 	END
 GO
-/****** Object:  StoredProcedure [Project1].[Load_SalesManagers]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[Load_SalesManagers]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -978,7 +978,7 @@ BEGIN
 	ORDER BY old.SalesManagerKey;
 END
 GO
-/****** Object:  StoredProcedure [Project1].[LoadStarSchemaData]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[LoadStarSchemaData]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1034,7 +1034,7 @@ BEGIN
 
 END;
 GO
-/****** Object:  StoredProcedure [Project1].[ShowTableStatusRowCount]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[ShowTableStatusRowCount]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1086,19 +1086,19 @@ BEGIN
 
 END
 GO
-/****** Object:  StoredProcedure [Project1].[TruncateStarSchemaData]    Script Date: 11/13/2018 10:11:13 AM ******/
+/****** Object:  StoredProcedure [Project1].[TruncateStarSchemaData]    Script Date: 11/13/2018 10:27:17 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-create PROCEDURE [Project1].[TruncateStarSchemaData]
+CREATE PROCEDURE [Project1].[TruncateStarSchemaData]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-
+	--something in this table
 	truncate table [CH01-01-Fact].Data; --first turnicate
 	truncate table [CH01-01-Dimension].[DimOccupation];
 	truncate table [CH01-01-Dimension].[DimOrderDate];
