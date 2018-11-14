@@ -4,15 +4,8 @@ go
 IF NOT EXISTS ( SELECT  * FROM    sys.schemas WHERE name = N'Process' ) 
     EXEC('CREATE SCHEMA Process AUTHORIZATION [dbo]');
 GO
-drop table if exists Process.WorkflowSteps;
 
-/*  id for the person,
-	LastName varchar(30) NULL DEFAULT ('Your last name'),
-	FirstName varchar(30) NULL DEFAULT ('Your first name'),
-	class time of the person (char[5]) 7:45’, ‘9:15’ or ’10:45’),
-	date of work (systime),
-	what the person did,
-	GroupName varchar(30) NULL DEFAULT ('Your group name')*/
+drop table if exists Process.WorkflowSteps;
 
 create table Process.WorkflowSteps(
 			 WorkFlowStepKey INT IDENTITY(1,1) NOT NULL
@@ -26,16 +19,21 @@ create table Process.WorkflowSteps(
 		    ,firstName varchar(30) null default 'Dilshod' -- individual table
 			,GroupName varchar(30) NULL DEFAULT ('group #2') -- for the group
 		  );
-	drop table if exists Process.[usp_TrackWorkFlow] 
-	create table Process.[usp_TrackWorkFlow] (startTime datetime2
-											 ,WorkFlowDescription varchar(max)
-											 ,WorkFlowStepTableRowCount varchar(max)
-											 );
+
+
+use BIClass;
+go
+drop table if exists Process.[usp_TrackWorkFlow] 
+create table Process.[usp_TrackWorkFlow] (startTime datetime2
+								         ,WorkFlowDescription varchar(max)
+										 ,WorkFlowStepTableRowCount varchar(max)
+										 );
 
 
 
-
-GO
+go
+use BIClass;
+go
 /****** Object:  StoredProcedure [Project1].[DropForeignKeysFromStarSchemaData]    Script Date: 11/12/2018 7:36:04 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -44,6 +42,11 @@ GO
 if OBJECT_ID('[Project1].[DropForeignKeysFromStarSchemaData]','p') is not null
 drop proc [Project1].[DropForeignKeysFromStarSchemaData];
 go
+-- =============================================
+-- Author:		<Dilshod,Khodjayev>
+-- Create date: <11/12/2018>
+-- Description:	<remove all the foreign keys from all tables>
+-- =============================================
 
 create PROCEDURE [Project1].[DropForeignKeysFromStarSchemaData]
 AS
@@ -74,17 +77,18 @@ BEGIN
 END;
 
 
-
-GO
+go
+use BIClass;
+go
 /****** Object:  StoredProcedure [Project1].[Load_SalesManagers]    Script Date: 11/12/2018 8:32:57 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
--- Author:		YourName
--- Create date: 
--- Description:	
+-- Author:		 Dilshod Khodjayev
+-- Create date:  11/12/2019
+-- Description:	 remove constr, remove data, add constr, add new cols, add data
 -- =============================================
 
 if OBJECT_ID('[Project1].[Load_DimTerritory]','p') is not null
@@ -126,6 +130,8 @@ END
 
 go
 
+use BIClass;
+go
 if OBJECT_ID('[Project1].[AddForeignKeysToStarSchemaData]','p') is not null
 	drop proc [Project1].[AddForeignKeysToStarSchemaData];
 go
@@ -136,6 +142,11 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+-- =============================================
+-- Author:		<Dilshod,Khodjayev>
+-- Create date: <11/12/2018>
+-- Description:	<add proper foreign keys into all tables>
+-- =============================================
 create PROCEDURE [Project1].[AddForeignKeysToStarSchemaData]
 
 AS
@@ -154,9 +165,11 @@ BEGIN
 
 	alter table [CH01-01-Dimension].[DimProduct]  add constraint [FK_DimProduct_DimProductSubcategory] foreign key([ProductSubcategoryKey]) references [CH01-01-Dimension].[DimProductSubcategory]([ProductSubcategoryKey]);
  
+ 
 END;
 
-
+go
+use BIClass;
 GO
 /****** Object:  StoredProcedure [Project1].[TruncateStarSchemaData]    Script Date: 11/13/2018 12:07:13 PM ******/
 SET ANSI_NULLS ON
@@ -168,7 +181,11 @@ if OBJECT_ID('[Project1].[TruncateStarSchemaData]','p') is not null
 	drop proc [Project1].[TruncateStarSchemaData];
 go
 
-
+-- =============================================
+-- Author:		<Dilshod,Khodjayev>
+-- Create date: <11/12/2018>
+-- Description:	<remove all data from all tables>
+-- =============================================
 create PROCEDURE [Project1].[TruncateStarSchemaData]
 AS
 BEGIN
@@ -186,6 +203,10 @@ BEGIN
  	truncate table [CH01-01-Dimension].[DimCustomer];
 	truncate table [CH01-01-Dimension].[DimGender];
 	truncate table [CH01-01-Dimension].[DimMaritalStatus];
+	truncate table [CH01-01-Dimension].[SalesManagers];
 
 
 end
+
+
+
