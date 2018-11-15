@@ -207,6 +207,122 @@ BEGIN
 
 
 end
+go
+use BIClass
+go
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Dilshod khodjayev>
+-- Create date: <11/13/2019>
+-- Description:	<process.TrackWorkFlow>
+-- =============================================
+if OBJECT_ID('process.TrackWorkFlow','p') is not null
+drop proc process.TrackWorkFlow;
+go
+CREATE PROCEDURE process.TrackWorkFlow
+	@StartTime DATETIME, 
+	@WorkFlowDescription NVARCHAR(100),
+	@WorkFlowStepTableRowCount int
+as
+BEGIN
+	insert into Process.WorkflowSteps 
+		(  [DateAdded]
+		  ,[WorkFlowStepDescription]
+		  ,[WorkFlowStepTableRowCount]
+		
+		 )
+	    values
+		 (
+		  @StartTime
+		 ,@WorkFlowDescription
+		 ,@WorkFlowStepTableRowCount
+		 );
+		 --,'20181112 16:56:50.1364677','20181113 16:56:50.1364677'
+END
+GO
+use BIClass
+go
 
+if OBJECT_ID('[Project1].[Load_DimTerritory]','p') is not null
+	drop proc [Project1].[Load_DimTerritory];
+go
 
+create PROCEDURE [Project1].[Load_DimTerritory]
 
+AS
+BEGIN
+declare @description varchar(max) = 'create extra cols and document it';
+declare @start datetime2 = sysdatetime();
+	
+		--insert into Process.WorkflowSteps 
+		--(  [DateAdded]
+		--  ,[WorkFlowStepDescription]
+		--  ,[WorkFlowStepTableRowCount]
+		--  ,[StartingDateTime]
+		--  ,[EndingDateTime]
+		-- )
+	 --   values
+		-- (
+		--  sysdatetime(),'table: DimTerritory, action: drop constr, truncate
+		--		        ,add constr, add new cols, repopulate table, document action'
+		-- ,60398,'2018-11-12 16:56:50.1364677','2018-11-13 16:56:50.1364677');
+ 	
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	 exec [Project1].[DropForeignKeysFromStarSchemaData]
+
+	 exec [Project1].[TruncateStarSchemaData]
+
+	 IF EXISTS(SELECT 1 FROM sys.columns 
+          WHERE Name = N'classTime' and name = N'LastName' and name = N'LastName' 
+		  and name = N'DateAdded' AND Object_ID = Object_ID(N'process.WorkflowSteps'))
+	BEGIN
+		alter table [CH01-01-Dimension].[DimTerritory] add classTime varchar(5)  null default '09:15';
+		alter table  [CH01-01-Dimension].[DimTerritory] add LastName  varchar(30) null default 'Khodjayev';
+		alter table [CH01-01-Dimension].[DimTerritory] add LastName   varchar(30) null default 'Dilshod';
+		alter table [CH01-01-Dimension].[DimTerritory] add DateAdded datetime2 null default sysdatetime();
+	END
+
+ exec [Project1].AddForeignKeysToStarSchemaData
+ 
+ 
+	INSERT INTO [CH01-01-Dimension].DimTerritory
+	(
+       [TerritoryGroup]
+      ,[TerritoryCountry]
+      ,[TerritoryRegion]
+ 
+	)
+	SELECT
+       [TerritoryGroup]
+      ,[TerritoryCountry]
+      ,[TerritoryRegion]
+	 
+	FROM FileUpload.OriginallyLoadedData 
+	--truncate table Process.WorkflowSteps 
+	 declare @rowC int
+	 select @rowC=COUNT(*) from [CH01-01-Dimension].DimTerritory;
+	 exec [Process].[TrackWorkFlow] @start, @description, @rowC
+	exec Project1.ShowTableStatusRowCount @description
+	 select * from Process.WorkflowSteps
+ END
+
+ 
+
+ 
+ 
