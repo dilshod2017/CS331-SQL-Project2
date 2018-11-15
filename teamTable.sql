@@ -268,19 +268,6 @@ BEGIN
 declare @description varchar(max) = 'create extra cols and document it';
 declare @start datetime2 = sysdatetime();
 	
-		--insert into Process.WorkflowSteps 
-		--(  [DateAdded]
-		--  ,[WorkFlowStepDescription]
-		--  ,[WorkFlowStepTableRowCount]
-		--  ,[StartingDateTime]
-		--  ,[EndingDateTime]
-		-- )
-	 --   values
-		-- (
-		--  sysdatetime(),'table: DimTerritory, action: drop constr, truncate
-		--		        ,add constr, add new cols, repopulate table, document action'
-		-- ,60398,'2018-11-12 16:56:50.1364677','2018-11-13 16:56:50.1364677');
- 	
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
@@ -318,7 +305,7 @@ declare @start datetime2 = sysdatetime();
 	 declare @rowC int
 	 select @rowC=COUNT(*) from [CH01-01-Dimension].DimTerritory;
 	 exec [Process].[TrackWorkFlow] @start, @description, @rowC
-	exec Project1.ShowTableStatusRowCount @description
+	--exec Project1.ShowTableStatusRowCount @description
 	 select * from Process.WorkflowSteps
  END
 
