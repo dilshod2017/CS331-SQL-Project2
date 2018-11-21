@@ -19,18 +19,14 @@ create table Process.WorkflowSteps(
 		    ,firstName varchar(30) null default 'Dilshod' -- individual table
 			,GroupName varchar(30) NULL DEFAULT ('group #2') -- for the group
 		  );
-
-
 use BIClass;
 go
-drop table if exists Process.[usp_TrackWorkFlow] 
-create table Process.[usp_TrackWorkFlow] (startTime datetime2
-								         ,WorkFlowDescription varchar(max)
-										 ,WorkFlowStepTableRowCount varchar(max)
-										 );
-
-
-
+drop table if exists Process.usp_TrackWorkFlow
+create table Process.usp_TrackWorkFlow
+				 (startTime datetime2
+				  ,WorkFlowDescription varchar(max)
+				  ,WorkFlowStepTableRowCount varchar(max)
+				  );
 go
 use BIClass;
 go
@@ -52,16 +48,6 @@ create PROCEDURE [Project1].[DropForeignKeysFromStarSchemaData]
 AS
 BEGIN
      SET NOCOUNT ON;
-		/* FK_Data_SalesManagers
-		FK_Data_DimOccupation
-		FK_Data_DimTerritory
-		FK_Data_DimProduct
-		FK_Data_DimCustomer
-		FK_Data_DimOrderDate
-		FK_Data_DimMaritalStatus
-		FK_Data_DimGender
-		*/
-		--this is test
 	alter table [CH01-01-Fact].Data drop constraint if exists FK_Data_DimOccupation;
  	alter table [CH01-01-Fact].Data drop constraint if exists FK_Data_DimTerritory;
 	alter table [CH01-01-Fact].Data drop constraint if exists FK_Data_DimProduct;
@@ -73,69 +59,65 @@ BEGIN
 	alter table [CH01-01-Dimension].[DimProductSubcategory] drop constraint if exists  [FK_DimProductSubcategory_DimProductCategory];
 	
 	alter table [CH01-01-Dimension].[DimProduct] drop constraint if exists [FK_DimProduct_DimProductSubcategory];
+	
+	 exec [Process].[removeConstraint] 'DimTerritory','classtime','class';
+	 exec [Process].[removeConstraint] 'DimTerritory','LastName','Last';
+	 exec [Process].[removeConstraint] 'DimTerritory','FirstName','First';
+	 exec [Process].[removeConstraint] 'DimTerritory','DateAdded','Date';
+
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists classTime;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists LastName;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists FirstName;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists DateAdded;
+
+	--hanjin constrains
+
+
+
+
+	--antorny's constrains
+
 
 END;
-
-
 go
-use BIClass;
-go
-/****** Object:  StoredProcedure [Project1].[Load_SalesManagers]    Script Date: 11/12/2018 8:32:57 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
--- Author:		 Dilshod Khodjayev
--- Create date:  11/12/2019
--- Description:	 remove constr, remove data, add constr, add new cols, add data
+-- Author:		<Dilshod khodjayev>
+-- Create date: <11/16/2018>
+-- Description:	<add all data back to the table>
 -- =============================================
-
-if OBJECT_ID('[Project1].[Load_DimTerritory]','p') is not null
-	drop proc [Project1].[Load_DimTerritory];
+if OBJECT_ID('[Process].[populateDimTerrritory]','p') is not null
+	drop proc [Process].[populateDimTerrritory];
 go
-
-create PROCEDURE [Project1].[Load_DimTerritory]
+create PROCEDURE [Process].[populateDimTerrritory]
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
- exec [Project1].[TruncateStarSchemaData]
- exec [Project1].[DropForeignKeysFromStarSchemaData]
-
- alter table [CH01-01-Dimension].[DimTerritory] add ClassTime varchar(5) null default '09:15';
- alter table  [CH01-01-Dimension].[DimTerritory] add LastName  varchar(30) null default 'Khodjayev';
- alter table [CH01-01-Dimension].[DimTerritory] add FirstName   varchar(30) null default 'Dilshod';
- alter table [CH01-01-Dimension].[DimTerritory] add DateAdded datetime2 null default sysdatetime();
-
- exec [Project1].AddForeignKeysToStarSchemaData
- 
- 
+	declare @description varchar(max) = 'remove data, remove constr, add new columns, populate table';
+	declare @start datetime2 = sysdatetime();
+	
 	INSERT INTO [CH01-01-Dimension].DimTerritory
 	(
        [TerritoryGroup]
       ,[TerritoryCountry]
       ,[TerritoryRegion]
+ 
 	)
 	SELECT
        [TerritoryGroup]
       ,[TerritoryCountry]
       ,[TerritoryRegion]
-	FROM FileUpload.OriginallyLoadedData 
 	 
+	FROM FileUpload.OriginallyLoadedData 
+	
+	 declare @rowC int
+	 select @rowC = COUNT(*) from [CH01-01-Dimension].DimTerritory;
+
+	 exec [Process].[TrackWorkFlow] @start, @description, @rowC
+ 	 select * from Process.WorkflowSteps
 END
-
- 
-
-go
-
-use BIClass;
 go
 if OBJECT_ID('[Project1].[AddForeignKeysToStarSchemaData]','p') is not null
 	drop proc [Project1].[AddForeignKeysToStarSchemaData];
-go
-
 GO
 /****** Object:  StoredProcedure [Project1].[AddForeignKeysToStarSchemaData]    Script Date: 11/12/2018 9:34:58 PM ******/
 SET ANSI_NULLS ON
@@ -151,7 +133,7 @@ create PROCEDURE [Project1].[AddForeignKeysToStarSchemaData]
 
 AS
 BEGIN
-    -- SET NOCOUNT ON added to prevent extra result sets from
+     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
 	alter table [CH01-01-Fact].Data add constraint FK_Data_DimOccupation foreign key([OccupationKey]) references [CH01-01-Dimension].[DimOccupation]([OccupationKey]);
 	alter table [CH01-01-Fact].Data add constraint FK_Data_DimTerritory foreign key([TerritoryKey]) references  [CH01-01-Dimension].[DimTerritory]([TerritoryKey]);
@@ -164,12 +146,11 @@ BEGIN
 	alter table[CH01-01-Dimension].[DimProductSubcategory] add constraint  [FK_DimProductSubcategory_DimProductCategory] foreign key([ProductCategoryKey]) references [CH01-01-Dimension].[DimProductCategory]([ProductCategoryKey]);
 
 	alter table [CH01-01-Dimension].[DimProduct]  add constraint [FK_DimProduct_DimProductSubcategory] foreign key([ProductSubcategoryKey]) references [CH01-01-Dimension].[DimProductSubcategory]([ProductSubcategoryKey]);
- 
- 
+	
+	exec process.populateDimTerrritory;
+
 END;
 
-go
-use BIClass;
 GO
 /****** Object:  StoredProcedure [Project1].[TruncateStarSchemaData]    Script Date: 11/13/2018 12:07:13 PM ******/
 SET ANSI_NULLS ON
@@ -180,7 +161,6 @@ GO
 if OBJECT_ID('[Project1].[TruncateStarSchemaData]','p') is not null
 	drop proc [Project1].[TruncateStarSchemaData];
 go
-
 -- =============================================
 -- Author:		<Dilshod,Khodjayev>
 -- Create date: <11/12/2018>
@@ -189,8 +169,7 @@ go
 create PROCEDURE [Project1].[TruncateStarSchemaData]
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
+ 
 	SET NOCOUNT ON;
 	--something in this table
 	truncate table [CH01-01-Fact].Data; --first turnicate
@@ -204,23 +183,9 @@ BEGIN
 	truncate table [CH01-01-Dimension].[DimGender];
 	truncate table [CH01-01-Dimension].[DimMaritalStatus];
 	truncate table [CH01-01-Dimension].[SalesManagers];
-
-
 end
+
 go
-use BIClass
-go
--- ================================================
--- Template generated from Template Explorer using:
--- Create Procedure (New Menu).SQL
---
--- Use the Specify Values for Template Parameters 
--- command (Ctrl-Shift-M) to fill in the parameter 
--- values below.
---
--- This block of comments will not be included in
--- the definition of the procedure.
--- ================================================
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -253,63 +218,111 @@ BEGIN
 		 );
 		 --,'20181112 16:56:50.1364677','20181113 16:56:50.1364677'
 END
+--/////////////////////////////////////////////////////////////////////////////////////////////////
 GO
-use BIClass
+/****** Object:  StoredProcedure [Process].[removeConstraint]    Script Date: 11/21/2018 12:40:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Dilshod Khodjayev>
+-- Create date: <11/18/2018>
+-- Description:	<remove new column default constraint>
+-- =============================================
+if OBJECT_ID('[Process].[removeConstraint]','p') is not null
+	drop proc [Process].[removeConstraint];
 go
+create proc [Process].[removeConstraint](
+	@table varchar(max),
+	@colName varchar(max),
+	@constrKeyPhrase varchar(max))
+ AS
+BEGIN
+ declare @constr as varchar(max) = 'none'
+	select @constr = SysDConstr.name  
+	from sys.all_columns as SysAllCols inner join
+		 sys.tables as SysTable 
+			on SysTable.object_id = SysAllCols.object_id inner join
+		 sys.default_constraints as SysDConstr on SysDConstr.parent_object_id = SysTable.object_id	
+	where SysAllCols.name = @colName and SysTable.name = @table and SysDConstr.name like +'%'+ @constrKeyPhrase+'%'
+ 
+ 	declare @result as varchar(max) = 'false'
 
+	if @constr not like 'none'
+	begin
+		declare @fullTableName as varchar(max) = '[CH01-01-Dimension].'+@table;
+		declare @query as varchar(max) = 'alter table '+@fullTableName+' drop constraint '+@constr;
+		execute(@query);
+	--	select 'deleted'
+	end	
+END
+go
+USE [BIClass]
+GO
+/****** Object:  StoredProcedure [Process].[populateDimTerrritory]    Script Date: 11/21/2018 2:39:56 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+
+go
+--///////////////////////////////////////////////////////////////////////////////////////
 if OBJECT_ID('[Project1].[Load_DimTerritory]','p') is not null
 	drop proc [Project1].[Load_DimTerritory];
 go
-
 create PROCEDURE [Project1].[Load_DimTerritory]
-
 AS
 BEGIN
-declare @description varchar(max) = 'create extra cols and document it';
-declare @start datetime2 = sysdatetime();
-	
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-	 exec [Project1].[DropForeignKeysFromStarSchemaData]
+ 
+	 exec [Process].[removeConstraint] 'DimTerritory','classtime','class';
+	 exec [Process].[removeConstraint] 'DimTerritory','LastName','Last';
+	 exec [Process].[removeConstraint] 'DimTerritory','FirstName','First';
+	 exec [Process].[removeConstraint] 'DimTerritory','DateAdded','Date';
+	
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists classTime;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists LastName;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists FirstName;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists DateAdded;
 
-	 exec [Project1].[TruncateStarSchemaData]
+	alter table [CH01-01-Dimension].[DimTerritory] add classTime varchar(5)  null default '09:15';
+	alter table [CH01-01-Dimension].[DimTerritory] add LastName  varchar(30) null default 'Khodjayev';
+	alter table [CH01-01-Dimension].[DimTerritory] add FirstName   varchar(30) null default 'Dilshod';
+	alter table [CH01-01-Dimension].[DimTerritory] add DateAdded datetime2 null default sysdatetime();
 
-	 IF EXISTS(SELECT 1 FROM sys.columns 
-          WHERE Name = N'classTime' and name = N'LastName' and name = N'LastName' 
-		  and name = N'DateAdded' AND Object_ID = Object_ID(N'process.WorkflowSteps'))
-	BEGIN
-		alter table [CH01-01-Dimension].[DimTerritory] add classTime varchar(5)  null default '09:15';
-		alter table  [CH01-01-Dimension].[DimTerritory] add LastName  varchar(30) null default 'Khodjayev';
-		alter table [CH01-01-Dimension].[DimTerritory] add LastName   varchar(30) null default 'Dilshod';
-		alter table [CH01-01-Dimension].[DimTerritory] add DateAdded datetime2 null default sysdatetime();
-	END
+END
 
- exec [Project1].AddForeignKeysToStarSchemaData
- 
- 
-	INSERT INTO [CH01-01-Dimension].DimTerritory
-	(
-       [TerritoryGroup]
-      ,[TerritoryCountry]
-      ,[TerritoryRegion]
- 
-	)
-	SELECT
-       [TerritoryGroup]
-      ,[TerritoryCountry]
-      ,[TerritoryRegion]
-	 
-	FROM FileUpload.OriginallyLoadedData 
-	--truncate table Process.WorkflowSteps 
-	 declare @rowC int
-	 select @rowC=COUNT(*) from [CH01-01-Dimension].DimTerritory;
-	 exec [Process].[TrackWorkFlow] @start, @description, @rowC
-	--exec Project1.ShowTableStatusRowCount @description
-	 select * from Process.WorkflowSteps
- END
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+go
+USE [BIClass]
+GO
+/****** Object:  StoredProcedure [Process].[TrackWorkFlow]    Script Date: 11/21/2018 2:06:38 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+if OBJECT_ID('[Process].[TrackWorkFlow]','p') is not null
+drop proc [Process].[TrackWorkFlow];
+go
+create PROCEDURE [Process].[TrackWorkFlow]
+	@StartTime DATETIME, 
+	@WorkFlowDescription NVARCHAR(100),
+	@WorkFlowStepTableRowCount int
+as
+BEGIN
+	insert into Process.WorkflowSteps 
+		(  [DateAdded]
+		  ,[WorkFlowStepDescription]
+		  ,[WorkFlowStepTableRowCount]
+		 )
+	    values
+		 (
+		  @StartTime
+		 ,@WorkFlowDescription
+		 ,@WorkFlowStepTableRowCount
+		 );
+END
 
- 
-
- 
- 
+ --dwadwadwadwadfwadfwadawdwa
+--dwadawdwadawdwadwad
+---wdadwadawdwadwad
