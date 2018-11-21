@@ -164,35 +164,7 @@ BEGIN
 		 );
 		 --,'20181112 16:56:50.1364677','20181113 16:56:50.1364677'
 END
-GO
-
-if OBJECT_ID('[Project1].[Load_DimTerritory]','p') is not null
-	drop proc [Project1].[Load_DimTerritory];
-go
-
-create PROCEDURE [Project1].[Load_DimTerritory]
-AS
-BEGIN
-	SET NOCOUNT ON;
- 
- 	
-	 exec [Process].[removeConstraint] 'DimTerritory','classtime','class';
-	 exec [Process].[removeConstraint] 'DimTerritory','LastName','Last';
-	 exec [Process].[removeConstraint] 'DimTerritory','FirstName','First';
-	 exec [Process].[removeConstraint] 'DimTerritory','DateAdded','Date';
-	
-	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists classTime;
-	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists LastName;
-	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists FirstName;
-	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists DateAdded;
-
-	alter table [CH01-01-Dimension].[DimTerritory] add classTime varchar(5)  null default '09:15';
-	alter table [CH01-01-Dimension].[DimTerritory] add LastName  varchar(30) null default 'Khodjayev';
-	alter table [CH01-01-Dimension].[DimTerritory] add FirstName   varchar(30) null default 'Dilshod';
-	alter table [CH01-01-Dimension].[DimTerritory] add DateAdded datetime2 null default sysdatetime();
-
-END
-
+--/////////////////////////////////////////////////////////////////////////////////////////////////
 GO
 /****** Object:  StoredProcedure [Process].[removeConstraint]    Script Date: 11/21/2018 12:40:24 PM ******/
 SET ANSI_NULLS ON
@@ -200,9 +172,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
--- Author:		<Author,,Name>
--- Create date: <Create Date, ,>
--- Description:	<Description, ,>
+-- Author:		<Dilshod Khodjayev>
+-- Create date: <11/18/2018>
+-- Description:	<remove new column default constraint>
 -- =============================================
 if OBJECT_ID('[Process].[removeConstraint]','p') is not null
 	drop proc [Process].[removeConstraint];
@@ -214,8 +186,6 @@ create proc [Process].[removeConstraint](
  AS
 BEGIN
  declare @constr as varchar(max) = 'none'
-		
- 
 	select @constr = SysDConstr.name  
 	from sys.all_columns as SysAllCols inner join
 		 sys.tables as SysTable 
@@ -233,6 +203,33 @@ BEGIN
 	--	select 'deleted'
 	end	
 END
+go
+--///////////////////////////////////////////////////////////////////////////////////////
+if OBJECT_ID('[Project1].[Load_DimTerritory]','p') is not null
+	drop proc [Project1].[Load_DimTerritory];
+go
+create PROCEDURE [Project1].[Load_DimTerritory]
+AS
+BEGIN
+	SET NOCOUNT ON;
+ 
+	 exec [Process].[removeConstraint] 'DimTerritory','classtime','class';
+	 exec [Process].[removeConstraint] 'DimTerritory','LastName','Last';
+	 exec [Process].[removeConstraint] 'DimTerritory','FirstName','First';
+	 exec [Process].[removeConstraint] 'DimTerritory','DateAdded','Date';
+	
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists classTime;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists LastName;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists FirstName;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists DateAdded;
+
+	alter table [CH01-01-Dimension].[DimTerritory] add classTime varchar(5)  null default '09:15';
+	alter table [CH01-01-Dimension].[DimTerritory] add LastName  varchar(30) null default 'Khodjayev';
+	alter table [CH01-01-Dimension].[DimTerritory] add FirstName   varchar(30) null default 'Dilshod';
+	alter table [CH01-01-Dimension].[DimTerritory] add DateAdded datetime2 null default sysdatetime();
+
+END
+
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 go
 USE [BIClass]
@@ -264,5 +261,4 @@ BEGIN
 		 );
 END
 
-truncate table  [Process].[WorkflowSteps]
- exec[Project1].[Load_DimTerritory]
+ 
