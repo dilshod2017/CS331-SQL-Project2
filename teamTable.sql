@@ -1,6 +1,6 @@
 use BIClass
 go
---Anthony was here
+
 IF NOT EXISTS ( SELECT  * FROM    sys.schemas WHERE name = N'Process' ) 
     EXEC('CREATE SCHEMA Process AUTHORIZATION [dbo]');
 GO
