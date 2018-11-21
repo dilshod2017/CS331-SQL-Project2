@@ -1,3 +1,4 @@
+
 use BIClass
 go
 
@@ -72,7 +73,7 @@ BEGIN
 
 	--hanjin constrains
 
-
+--commenty
 
 
 	--antorny's constrains
@@ -292,15 +293,210 @@ BEGIN
 
 END
 
+<<<<<<< HEAD
+ 
+ -- =============================================
+-- Author:		<Anthony Pena>
+-- Create date: <11/16/2018>
+-- Description:	<Project1.Load_DimProduct>
+-- =============================================
+GO
+use BIClass
+go
+=======
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 go
 USE [BIClass]
 GO
 /****** Object:  StoredProcedure [Process].[TrackWorkFlow]    Script Date: 11/21/2018 2:06:38 PM ******/
+>>>>>>> origin/master
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+<<<<<<< HEAD
+if OBJECT_ID('[Project1].[Load_DimOrderDate]','p') is not null
+	drop proc [Project1].[Load_DimOrderDate];
+go
+CREATE PROCEDURE [Project1].[Load_DimOrderDate]
+AS
+BEGIN
+	declare @description varchar(max) = 'Modify Load_DimOrderDate';
+	declare @start datetime2 = sysdatetime();
+
+		 IF EXISTS(SELECT 1 FROM sys.columns 
+			  WHERE Name = N'classTime' and name = N'LastName' and name = N'LastName' 
+			  and name = N'DateAdded' AND Object_ID = Object_ID(N'process.WorkflowSteps'))
+		BEGIN
+			alter table [CH01-01-Dimension].[DimProduct] add classTime varchar(5)  null default '3:52';
+			alter table  [CH01-01-Dimension].[DimProduct] add LastName  varchar(30) null default 'Pena';
+			alter table [CH01-01-Dimension].[DimProduct] add LastName   varchar(30) null default 'Anthony';
+			alter table [CH01-01-Dimension].[DimProduct] add DateAdded datetime2 null default sysdatetime();
+		END
+	
+	SET NOCOUNT ON;
+	INSERT INTO [CH01-01-Dimension].[DimOrderDate](
+		[OrderDate], [MonthName], [MonthNumber], [Year] 
+	)
+
+	SELECT Distinct [OrderDate], [MonthName], [MonthNumber], [Year]
+	FROM [FileUpload].[OriginallyLoadedData]
+	ORDER BY  OrderDate
+
+	PRINT 'PROC Load_DimOrderDate done'
+
+	declare @rowC int
+	select @rowC=COUNT(*) from [CH01-01-Dimension].[DimOrderDate];
+	exec [Process].[TrackWorkFlow] @start, @description, @rowC
+	select * from Process.WorkflowSteps
+END
+GO	
+
+ 
+-- =============================================
+-- Author:		<Anthony Pena>
+-- Create date: <11/15/2018>
+-- Description:	<Project1.Load_DimProduct>
+-- =============================================
+GO
+use BIClass
+go
+SET ANSI_NULLS ON	
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+if OBJECT_ID('[Project1].[Load_DimProduct]','p') is not null
+	drop proc [Project1].[Load_DimProduct];
+go
+create PROCEDURE [Project1].[Load_DimProduct] AS
+	BEGIN
+	declare @description varchar(max) = 'Modify Load_DimProduct';
+	declare @start datetime2 = sysdatetime();
+
+		 IF EXISTS(SELECT 1 FROM sys.columns 
+			  WHERE Name = N'classTime' and name = N'LastName' and name = N'LastName' 
+			  and name = N'DateAdded' AND Object_ID = Object_ID(N'process.WorkflowSteps'))
+		BEGIN
+			alter table [CH01-01-Dimension].[DimProduct] add classTime varchar(5)  null default '17:40';
+			alter table  [CH01-01-Dimension].[DimProduct] add LastName  varchar(30) null default 'Pena';
+			alter table [CH01-01-Dimension].[DimProduct] add LastName   varchar(30) null default 'Anthony';
+			alter table [CH01-01-Dimension].[DimProduct] add DateAdded datetime2 null default sysdatetime();
+		END
+	SET NOCOUNT ON;
+	INSERT INTO [CH01-01-Dimension].[DimOrderDate](
+	[OrderDate], [MonthName], [MonthNumber], [Year] 
+	)
+
+SELECT Distinct [OrderDate], [MonthName], [MonthNumber], [Year]
+FROM [FileUpload].[OriginallyLoadedData]
+ORDER BY  OrderDate
+
+PRINT 'PROC Load_DimOrderDate done'
+
+	declare @rowC int
+	select @rowC=COUNT(*) from [CH01-01-Dimension].[DimProduct];
+	exec [Process].[TrackWorkFlow] @start, @description, @rowC
+	select * from Process.WorkflowSteps
+END
+GO
+
+-- =============================================
+-- Author:		<Anthony Pena>
+-- Create date: <11/15/2018>
+-- Description:	<Project1.Load_DimProduct>
+-- =============================================
+GO
+use BIClass
+go
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+if OBJECT_ID('[Project1].[Load_DimProductCategory]','p') is not null
+	drop proc [Project1].[Load_DimProductCategory];
+go
+CREATE PROCEDURE [Project1].[Load_DimProductCategory]
+AS
+BEGIN
+	declare @description varchar(max) = 'Modify Load_DimProductCategory';
+	declare @start datetime2 = sysdatetime();
+
+		 IF EXISTS(SELECT 1 FROM sys.columns 
+			  WHERE Name = N'classTime' and name = N'LastName' and name = N'LastName' 
+			  and name = N'DateAdded' AND Object_ID = Object_ID(N'process.WorkflowSteps'))
+		BEGIN
+			alter table [CH01-01-Dimension].[DimProduct] add classTime varchar(5)  null default '11:40';
+			alter table  [CH01-01-Dimension].[DimProduct] add LastName  varchar(30) null default 'Pena';
+			alter table [CH01-01-Dimension].[DimProduct] add LastName   varchar(30) null default 'Anthony';
+			alter table [CH01-01-Dimension].[DimProduct] add DateAdded datetime2 null default sysdatetime();
+		END
+	
+	SET NOCOUNT ON;
+	INSERT INTO [CH01-01-Dimension].[DimProductCategory]([ProductCategory])
+	SELECT DISTINCT [ProductCategory]
+	FROM [FileUpload].[OriginallyLoadedData]
+
+	PRINT 'PROC Load_DimProductCategory done'
+
+	declare @rowC int
+	select @rowC=COUNT(*) from [CH01-01-Dimension].[DimProductCategory];
+	exec [Process].[TrackWorkFlow] @start, @description, @rowC
+	select * from Process.WorkflowSteps
+END
+GO	
+
+
+-- =============================================
+-- Author:		<Anthony Pena>
+-- Create date: <11/16/2018>
+-- Description:	<Project1.Load_DimProduct>
+-- =============================================
+GO
+use BIClass
+go
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+if OBJECT_ID('[Project1].[Load_DimProductSubcategory]','p') is not null
+	drop proc [Project1].[Load_DimProductSubcategory];
+go
+CREATE PROCEDURE [Project1].[Load_DimProductSubcategory]
+AS
+BEGIN
+	declare @description varchar(max) = 'Modify Load_DimProductSubcategory';
+	declare @start datetime2 = sysdatetime();
+
+		 IF EXISTS(SELECT 1 FROM sys.columns 
+			  WHERE Name = N'classTime' and name = N'LastName' and name = N'LastName' 
+			  and name = N'DateAdded' AND Object_ID = Object_ID(N'process.WorkflowSteps'))
+		BEGIN
+			alter table [CH01-01-Dimension].[DimProduct] add classTime varchar(5)  null default '2:10';
+			alter table  [CH01-01-Dimension].[DimProduct] add LastName  varchar(30) null default 'Pena';
+			alter table [CH01-01-Dimension].[DimProduct] add LastName   varchar(30) null default 'Anthony';
+			alter table [CH01-01-Dimension].[DimProduct] add DateAdded datetime2 null default sysdatetime();
+		END
+	
+	SET NOCOUNT ON
+	INSERT INTO [CH01-01-Dimension].[DimProductSubcategory]( 
+		[ProductCategoryKey], [ProductSubcategory]
+	)
+
+	SELECT DISTINCT DPC.ProductCategoryKey, OLD.ProductSubcategory
+    FROM FileUpload.OriginallyLoadedData AS OLD
+        INNER JOIN [CH01-01-Dimension].[DimProductCategory] AS DPC
+            ON DPC.ProductCategory = OLD.ProductCategory;
+	
+	PRINT 'PROC Load_DimProductSubcategory '
+
+	declare @rowC int
+	select @rowC=COUNT(*) from [CH01-01-Dimension].[DimProductSubcategory];
+	exec [Process].[TrackWorkFlow] @start, @description, @rowC
+	select * from Process.WorkflowSteps
+END
+GO	
+
+=======
 if OBJECT_ID('[Process].[TrackWorkFlow]','p') is not null
 drop proc [Process].[TrackWorkFlow];
 go
@@ -326,3 +522,4 @@ END
  --dwadwadwadwadfwadfwadawdwa
 --dwadawdwadawdwadwad
 ---wdadwadawdwadwad
+>>>>>>> origin/master
