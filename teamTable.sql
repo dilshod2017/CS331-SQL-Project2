@@ -1,10 +1,14 @@
 use BIClass
 go
 
+
+  exec  [Project1].[Load_DimTerritory]
+
+
 IF NOT EXISTS ( SELECT  * FROM    sys.schemas WHERE name = N'Process' ) 
     EXEC('CREATE SCHEMA Process AUTHORIZATION [dbo]');
 GO
-
+/*
 drop table if exists Process.WorkflowSteps;
 
 create table Process.WorkflowSteps(
@@ -30,6 +34,7 @@ create table Process.[usp_TrackWorkFlow] (startTime datetime2
 										 );
 
 
+*/
 
 go
 use BIClass;
@@ -275,15 +280,28 @@ declare @start datetime2 = sysdatetime();
 
 	 exec [Project1].[TruncateStarSchemaData]
 
-	 IF EXISTS(SELECT 1 FROM sys.columns 
-          WHERE Name = N'classTime' and name = N'LastName' and name = N'LastName' 
-		  and name = N'DateAdded' AND Object_ID = Object_ID(N'process.WorkflowSteps'))
+	 IF not EXISTS(SELECT 1 FROM sys.columns 
+          WHERE Name = N'classTime' AND Object_ID = Object_ID(N'[CH01-01-Dimension].[DimTerritory]'))
 	BEGIN
 		alter table [CH01-01-Dimension].[DimTerritory] add classTime varchar(5)  null default '09:15';
+	END
+	
+	 IF not EXISTS(SELECT 1 FROM sys.columns 
+          WHERE Name = N'LastName' AND Object_ID = Object_ID(N'[CH01-01-Dimension].[DimTerritory]'))
+	BEGIN
 		alter table  [CH01-01-Dimension].[DimTerritory] add LastName  varchar(30) null default 'Khodjayev';
-		alter table [CH01-01-Dimension].[DimTerritory] add LastName   varchar(30) null default 'Dilshod';
+	END
+		 IF not EXISTS(SELECT 1 FROM sys.columns 
+          WHERE Name = N'Firstname' AND Object_ID = Object_ID(N'[CH01-01-Dimension].[DimTerritory]'))
+	BEGIN
+		alter table [CH01-01-Dimension].[DimTerritory] add FirstName   varchar(30) null default 'Dilshod';
+	END
+	IF not EXISTS(SELECT 1 FROM sys.columns 
+          WHERE Name = N'DateAdded' AND Object_ID = Object_ID(N'[CH01-01-Dimension].[DimTerritory]'))
+	BEGIN
 		alter table [CH01-01-Dimension].[DimTerritory] add DateAdded datetime2 null default sysdatetime();
 	END
+
 
  exec [Project1].AddForeignKeysToStarSchemaData
  
