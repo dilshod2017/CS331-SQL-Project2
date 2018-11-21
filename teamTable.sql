@@ -2,7 +2,7 @@ use BIClass
 go
 
 
-  exec  [Project1].[Load_DimTerritory]
+  
 
 
 IF NOT EXISTS ( SELECT  * FROM    sys.schemas WHERE name = N'Process' ) 
@@ -328,6 +328,88 @@ declare @start datetime2 = sysdatetime();
  END
 
  
+ go
+ USE [BIClass]
+GO
+/****** Object:  StoredProcedure [Process].[removeConstraint]    Script Date: 11/21/2018 12:40:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date, ,>
+-- Description:	<Description, ,>
+-- =============================================
+if OBJECT_ID('[Process].[removeConstraint]','p') is not null
+	drop proc [Process].[removeConstraint];
+go
+create proc [Process].[removeConstraint](
+	@table varchar(max),
+	@colName varchar(max),
+	@constrKeyPhrase varchar(max))
+ AS
+BEGIN
+ declare @constr as varchar(max) = 'none'
+		
+ 
+	select @constr = SysDConstr.name  
+	from sys.all_columns as SysAllCols inner join
+		 sys.tables as SysTable 
+			on SysTable.object_id = SysAllCols.object_id inner join
+		 sys.default_constraints as SysDConstr on SysDConstr.parent_object_id = SysTable.object_id	
+	where SysAllCols.name = @colName and SysTable.name = @table and SysDConstr.name like +'%'+ @constrKeyPhrase+'%'
+ 
+ 	declare @result as varchar(max) = 'false'
 
- 
- 
+	if @constr not like 'none'
+	begin
+		declare @fullTableName as varchar(max) = '[CH01-01-Dimension].'+@table;
+		declare @query as varchar(max) = 'alter table '+@fullTableName+' drop constraint '+@constr;
+		execute(@query);
+	--	select 'deleted'
+	end
+	--else
+	--begin
+	--	select 'not deleted'
+	--end
+	
+
+ 	
+END
+
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+go
+USE [BIClass]
+GO
+/****** Object:  StoredProcedure [Process].[TrackWorkFlow]    Script Date: 11/21/2018 2:06:38 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+if OBJECT_ID('[Process].[TrackWorkFlow]','p') is not null
+drop proc [Process].[TrackWorkFlow];
+go
+create PROCEDURE [Process].[TrackWorkFlow]
+	@StartTime DATETIME, 
+	@WorkFlowDescription NVARCHAR(100),
+	@WorkFlowStepTableRowCount int
+as
+BEGIN
+	insert into Process.WorkflowSteps 
+		(  [DateAdded]
+		  ,[WorkFlowStepDescription]
+		  ,[WorkFlowStepTableRowCount]
+		
+		 )
+	    values
+		 (
+		  @StartTime
+		 ,@WorkFlowDescription
+		 ,@WorkFlowStepTableRowCount
+		 );
+		 --,'20181112 16:56:50.1364677','20181113 16:56:50.1364677'
+END
+
+truncate table  [Process].[WorkflowSteps]
+ exec[Project1].[Load_DimTerritory]
