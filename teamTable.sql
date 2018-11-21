@@ -59,8 +59,62 @@ BEGIN
 	alter table [CH01-01-Dimension].[DimProductSubcategory] drop constraint if exists  [FK_DimProductSubcategory_DimProductCategory];
 	
 	alter table [CH01-01-Dimension].[DimProduct] drop constraint if exists [FK_DimProduct_DimProductSubcategory];
-END;
+	
+	 exec [Process].[removeConstraint] 'DimTerritory','classtime','class';
+	 exec [Process].[removeConstraint] 'DimTerritory','LastName','Last';
+	 exec [Process].[removeConstraint] 'DimTerritory','FirstName','First';
+	 exec [Process].[removeConstraint] 'DimTerritory','DateAdded','Date';
 
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists classTime;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists LastName;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists FirstName;
+	alter table [CH01-01-Dimension].[DimTerritory] drop column if exists DateAdded;
+
+	--hanjin constrains
+
+
+
+
+	--antorny's constrains
+
+
+END;
+go
+GO
+-- =============================================
+-- Author:		<Dilshod khodjayev>
+-- Create date: <11/16/2018>
+-- Description:	<add all data back to the table>
+-- =============================================
+if OBJECT_ID('[Process].[populateDimTerrritory]','p') is not null
+	drop proc [Process].[populateDimTerrritory];
+go
+create PROCEDURE [Process].[populateDimTerrritory]
+AS
+BEGIN
+	declare @description varchar(max) = 'remove data, remove constr, add new columns, populate table';
+	declare @start datetime2 = sysdatetime();
+	
+	INSERT INTO [CH01-01-Dimension].DimTerritory
+	(
+       [TerritoryGroup]
+      ,[TerritoryCountry]
+      ,[TerritoryRegion]
+ 
+	)
+	SELECT
+       [TerritoryGroup]
+      ,[TerritoryCountry]
+      ,[TerritoryRegion]
+	 
+	FROM FileUpload.OriginallyLoadedData 
+	
+	 declare @rowC int
+	 select @rowC = COUNT(*) from [CH01-01-Dimension].DimTerritory;
+
+	 exec [Process].[TrackWorkFlow] @start, @description, @rowC
+ 	 select * from Process.WorkflowSteps
+END
 go
 if OBJECT_ID('[Project1].[AddForeignKeysToStarSchemaData]','p') is not null
 	drop proc [Project1].[AddForeignKeysToStarSchemaData];
@@ -210,41 +264,7 @@ GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
-GO
--- =============================================
--- Author:		<Dilshod khodjayev>
--- Create date: <11/16/2018>
--- Description:	<add all data back to the table>
--- =============================================
-if OBJECT_ID('[Process].[populateDimTerrritory]','p') is not null
-	drop proc [Process].[populateDimTerrritory];
-go
-create PROCEDURE [Process].[populateDimTerrritory]
-AS
-BEGIN
-	declare @description varchar(max) = 'remove data, remove constr, add new columns, populate table';
-	declare @start datetime2 = sysdatetime();
-	
-	INSERT INTO [CH01-01-Dimension].DimTerritory
-	(
-       [TerritoryGroup]
-      ,[TerritoryCountry]
-      ,[TerritoryRegion]
- 
-	)
-	SELECT
-       [TerritoryGroup]
-      ,[TerritoryCountry]
-      ,[TerritoryRegion]
-	 
-	FROM FileUpload.OriginallyLoadedData 
-	
-	 declare @rowC int
-	 select @rowC = COUNT(*) from [CH01-01-Dimension].DimTerritory;
 
-	 exec [Process].[TrackWorkFlow] @start, @description, @rowC
- 	 select * from Process.WorkflowSteps
-END
 go
 --///////////////////////////////////////////////////////////////////////////////////////
 if OBJECT_ID('[Project1].[Load_DimTerritory]','p') is not null
