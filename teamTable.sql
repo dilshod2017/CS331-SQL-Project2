@@ -204,6 +204,48 @@ BEGIN
 	end	
 END
 go
+USE [BIClass]
+GO
+/****** Object:  StoredProcedure [Process].[populateDimTerrritory]    Script Date: 11/21/2018 2:39:56 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Dilshod khodjayev>
+-- Create date: <11/16/2018>
+-- Description:	<add all data back to the table>
+-- =============================================
+if OBJECT_ID('[Process].[populateDimTerrritory]','p') is not null
+	drop proc [Process].[populateDimTerrritory];
+go
+create PROCEDURE [Process].[populateDimTerrritory]
+AS
+BEGIN
+	declare @description varchar(max) = 'remove data, remove constr, add new columns, populate table';
+	declare @start datetime2 = sysdatetime();
+	
+	INSERT INTO [CH01-01-Dimension].DimTerritory
+	(
+       [TerritoryGroup]
+      ,[TerritoryCountry]
+      ,[TerritoryRegion]
+ 
+	)
+	SELECT
+       [TerritoryGroup]
+      ,[TerritoryCountry]
+      ,[TerritoryRegion]
+	 
+	FROM FileUpload.OriginallyLoadedData 
+	
+	 declare @rowC int
+	 select @rowC = COUNT(*) from [CH01-01-Dimension].DimTerritory;
+
+	 exec [Process].[TrackWorkFlow] @start, @description, @rowC
+ 	 select * from Process.WorkflowSteps
+END
+go
 --///////////////////////////////////////////////////////////////////////////////////////
 if OBJECT_ID('[Project1].[Load_DimTerritory]','p') is not null
 	drop proc [Project1].[Load_DimTerritory];
